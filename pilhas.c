@@ -12,20 +12,29 @@ typedef struct {
 
 
 //Criar nova pilha
-Pilha* cria(){
- Pilha *p = malloc(sizeof(Pilha));
- p->topo = 0; //inicializa a posição atual com zero
- return p;
+Pilha* criar(int tamanho){
+ Pilha *pilha = malloc(sizeof(Pilha)); //alocação dinâmica
+ pilha -> topo = 0; //inicializa a posição atual com zero
+ pilha -> tamanho = tamanho; //atribuir tamanho
+ pilha -> vetor = malloc(sizeof(int) * tamanho); //alocação dinâmica do vetor da pilha
+ 
+ return pilha;
 }
 
 
 //Inserir novo elemento na pilha
-void push(Pilha *p, int v){
- if (p->topo == MAX) {
- printf("Capacidade máxima da pilha foi alcançada");
- exit(-1);
+int cheia(Pilha *pilha){
+ return pilha -> topo == pilha -> tamanho;
+}
+
+void push(Pilha *p, int valor){
+ if (!cheia(pilha)) { //verificar a capacidade da pilha
+  printf("Capacidade máxima da pilha foi alcançada");
+  exit(-1);
  } else {
- p[p->topo++] = v; //insere elemento na próxima posição livre
+  pilha -> vetor[pilha -> topo] = valor; //insere elemento na próxima posição livre
+  pilha -> topo++;
+  //pode ser: pilha -> vetor[pilha -> topo++] = valor;
  }
 }
 
@@ -71,6 +80,15 @@ void percorre(Pilha *p){
 
 /////////////////////
 //PILHAS DINÂMICAS
+
+//Definição
+#define MAX 10
+typedef struct {
+ int topo; //posição atual do vetor (topo)
+ int tamanho;
+ int **vetor; //ponteiro de ponteiro do vetor
+} Pilha;
+
 
 //Implementação com ponteiros e alocação dinâmica de memória
 typedef struct {
