@@ -1,9 +1,9 @@
-//Operações: emplihar (push) e desempilhar (pop).
+//Operações: empilhar (push) e desempilhar (pop).
 
 /////////////////////
 //PILHAS ESTÁTICAS
 
-//Definição:
+//Definição
 #define MAX 10
 typedef struct {
  int topo; //posição atual do vetor (topo)
@@ -11,7 +11,7 @@ typedef struct {
 } Pilha;
 
 
-//Criar nova pilha:
+//Criar nova pilha
 Pilha* cria(){
  Pilha *p = malloc(sizeof(Pilha));
  p->topo = 0; //inicializa a posição atual com zero
