@@ -13,7 +13,7 @@ typedef struct {
 
 //Criar nova pilha
 Pilha* criar(int tamanho){
- Pilha *pilha = malloc(sizeof(Pilha)); //alocação dinâmica
+ Pilha* pilha = malloc(sizeof(Pilha)); //alocação dinâmica
  pilha -> topo = 0; //inicializa a posição atual com zero
  pilha -> tamanho = tamanho; //atribuir tamanho
  pilha -> vetor = malloc(sizeof(int) * tamanho); //alocação dinâmica do vetor da pilha
@@ -22,47 +22,50 @@ Pilha* criar(int tamanho){
 }
 
 
-//Inserir novo elemento na pilha
-int cheia(Pilha *pilha){
+//Verificar se a pilha está cheia
+int cheia(Pilha* pilha){
  return pilha -> topo == pilha -> tamanho;
 }
 
-void push(Pilha *p, int valor){
+
+//Inserir novo elemento na pilha
+void push(Pilha* pilha, int valor){
  if (!cheia(pilha)) { //verificar a capacidade da pilha
   printf("Capacidade máxima da pilha foi alcançada");
   exit(-1);
  } else {
   pilha -> vetor[pilha -> topo] = valor; //insere elemento na próxima posição livre
   pilha -> topo++;
-  //pode ser: pilha -> vetor[pilha -> topo++] = valor;
+  //pode ser: pilha -> vetor[pilha -> topo++] = valor; //atribui o valor para o topo da pilha e incrementa o topo
  }
 }
 
 
 //Verificar se a pilha está vazia
-int vazia(Pilha *p){
- return p->topo == 0;
+int vazia(Pilha* pilha){
+ return pilha->topo == 0;
 }
 
 
 //Remover elemento do topo da pilha
-int pop(Pilha *p){
+int pop(Pilha* pilha){
 int v;
 
- if (vazia(p)) {
- printf("Pilha vazia");
- exit(-1);
+ if (vazia(pilha)) {
+  printf("Pilha vazia");
+  exit(-1);
  } else {
- v = p[p->topo--]; //recupera valor do topo
+    v = p[p->topo--]; //recupera valor do topo
  }
  return v;
+ //return pilha -> vetor[-- pilha -> topo]; //decrementa o vetor e acessa o valor
 }
 
 
 //Libera memória da pilha
 void limpa(Pilha *p){
  if (p != NULL) {
- free(p);
+  free(p);
  }
 
  p = NULL;
@@ -72,9 +75,9 @@ void limpa(Pilha *p){
 //Visitar todos os elmentos da pilha
 void percorre(Pilha *p){
  while (vazia(p)) {
- int v = pop(p);
+  int v = pop(p);
 
- printf("%d", v);
+  printf("%d", v);
  }
 }
 
