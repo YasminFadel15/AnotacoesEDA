@@ -210,12 +210,12 @@ int cheia(Pilha* pilha){
 }
 
 
-void push(Pilha* pilha, char letra){
+void push(Pilha* pilha, int num){
     if(cheia(pilha)){
         printf("Pilha cheia.");
         exit(-1);
     } else {
-        pilha -> v[pilha -> topo++] = letra;
+        pilha -> v[pilha -> topo++] = num;
     } 
 }
 
@@ -225,51 +225,136 @@ int vazia(Pilha* pilha){
 }
 
 
-char pop(Pilha* pilha){
-    char letra;
+int sequencia(int* vetor, int k, int tamanho){
+    for(int i = 0 ; i < tamanho ; i++){
+        if(vetor[i] == k){
+            return 1;
+        } 
+    }
+    return 0;
+}
+
+int main() {
+    int tamanho;
+    printf("Digite a quantidade de números: \n");
+    scanf("%d", &tamanho);
+    
+    int k;
+    printf("Digite k: \n");
+    scanf("%d", &k);
+    
+    int vetor[MAX];
+    
+    printf("Digite a sequência de números:\n");
+    for(int i = 0 ; i < tamanho ; i++){
+        scanf(" %d", &vetor[i]);
+    }
+    
+    Pilha* pilha = criar(tamanho);
+    
+    if(sequencia(vetor, k, tamanho)){
+        printf("%d existe na sequência.", k);
+    } else {
+        printf("%d não existe na sequência.", k);
+    }
+    
+
+    return 0;
+}
+
+
+//Versão 2
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 100
+
+typedef struct{
+    char topo;
+    char* v;
+    int tamanho;
+} Pilha;
+
+
+Pilha* criar(int tamanho){
+    Pilha* pilha = malloc(sizeof(Pilha));
+    pilha -> topo = 0;
+    pilha -> tamanho = tamanho;
+    pilha -> v = malloc(sizeof(char) * tamanho);
+    
+    return pilha;
+}
+
+
+int cheia(Pilha* pilha){
+    return pilha -> topo == pilha -> tamanho;
+}
+
+
+void push(Pilha* pilha, int num){
+    if(cheia(pilha)){
+        printf("Pilha cheia.");
+        exit(-1);
+    } else {
+        pilha -> v[pilha -> topo++] = num;
+    } 
+}
+
+
+int vazia(Pilha* pilha){
+    return pilha -> topo == 0;
+}
+
+
+int pop(Pilha* pilha){
+    int num;
     
     if(vazia(pilha)){
         printf("Pilha vazia.");
         exit(-1);
     } else {
-        letra = pilha -> v[-- pilha -> topo];
+        num = pilha -> v[-- pilha -> topo];
     }
-    return letra;
+    return num;
 }
 
 
-int palindromo(char* palavra){
-    int tam = strlen(palavra);
-    
-    Pilha* pilha = criar(tam);
-    
-    for(int i = 0 ; i < tam ; i++){
-        push(pilha, palavra[i]);
-    }
-    for(int i = 0 ; i < tam ; i++){
-        if(pop(pilha) != palavra[i]){
-            return 0;
+int sequencia(Pilha* pilha, int k){
+    int num;
+    while(!vazia(pilha)){
+        num = pop(pilha);
+        
+        if(num == k){
+            return 1;
         }
-    } return 1;
+    }
+    return 0;
 }
 
 int main() {
     int tamanho;
-    printf("Digite o tamanho da palavra: \n");
+    printf("Digite a quantidade de números: \n");
     scanf("%d", &tamanho);
     
-    char palavra[MAX];
+    int k;
+    printf("Digite k: \n");
+    scanf("%d", &k);
     
+    int vetor[MAX];
+    
+    printf("Digite a sequência de números:\n");
     for(int i = 0 ; i < tamanho ; i++){
-        scanf(" %c", &palavra[i]);
+        scanf(" %d", &vetor[i]);
     }
     
     Pilha* pilha = criar(tamanho);
     
-    if(palindromo(palavra)){
-        printf("Palíndromo.");
+    if(sequencia(pilha, k)){
+        printf("%d existe na sequência.", k);
     } else {
-        printf("Não é palíndromo.");
+        printf("%d não existe na sequência.", k);
     }
     
 
