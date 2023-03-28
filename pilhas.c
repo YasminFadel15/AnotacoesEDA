@@ -105,7 +105,7 @@ typedef struct {
 
 
 //Criar nova pilha
-Pilha* cria(){
+Pilha* criar(){
  Pilha* pilha = malloc(sizeof(Pilha));
  pilha -> topo = NULL; //inicializa o topo da pilha com nulo para evitar lixo de memória
  return pilha;
@@ -116,7 +116,7 @@ Pilha* cria(){
 void push(Pilha* pilha, int valor){
  No* no = malloc(sizeof(No));
  no -> valor = valor; //o valor do nó recebe o valor do parâmetro
- no -> anterior = pilha -> topo; //elemento anterior recebe o topo da pilha
+ no -> anterior = (struct No*) pilha -> topo; //elemento anterior recebe o topo da pilha
  pilha -> topo = no; //atualização do topo
 }
 
@@ -147,7 +147,7 @@ int pop(Pilha* pilha){
 int desempilhar(Pilha* pilha){
  if(!vazia(pilha)){
   int valor = pilha -> topo -> valor;
-  No* antigo_topo = (struct No*) pilha -> topo; 
+  No* antigo_topo = pilha -> topo; 
   pilha -> topo = (No*) pilha -> topo -> anterior; //ponteiro do topo da pilha igual ao elemento anterior do topo da pilha
   free(antigo_topo); //liberar a memória 
   
@@ -185,7 +185,6 @@ void percorre(Pilha* pilha){
 }
 
 
-
 int main(){
  Pilha* pilha = criar();
  
@@ -202,4 +201,6 @@ int main(){
  }
  
  printf("\n");
-         
+        
+ return 0;
+}
