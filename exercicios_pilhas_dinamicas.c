@@ -13,7 +13,6 @@ typedef struct {
 } Pilha;
 
 
-
 //Criar nova pilha
 Pilha* criar(){
  Pilha* pilha = malloc(sizeof(Pilha));
@@ -87,3 +86,80 @@ int main() {
 
 
 
+//Passar os elementos da pilha estática para a pilha dinâmica
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TAM_MAX 100
+
+typedef struct {
+    int* valor; //vetor que armazena os elementos da pilha dinâmica
+    int topo; //índice do topo da pilha
+    int tamanho; //capacidade máxima da pilha dinâmica
+} Pilha;
+
+
+Pilha* criar(int tamanho){
+    Pilha* pilha = malloc(sizeof(Pilha));
+    pilha -> valor = malloc(tamanho * sizeof(int));
+    pilha -> topo = -1; //inicializa o topo da pilha com -1 para indicar pilha vazia
+    pilha -> tamanho = tamanho;
+    return pilha;
+}
+
+
+int vazia(Pilha* pilha) {
+    return pilha -> topo == -1;
+}
+
+
+//Inserir um novo elemento na pilha dinâmica
+void push(Pilha* pilha, int valor){
+    if(pilha -> topo == pilha -> tamanho - 1){
+        printf("Erro: pilha cheia!\n");
+        exit(-1);
+    }
+    pilha -> topo++;
+    pilha -> valor[pilha->topo] = valor;
+}
+
+
+//Remover elemento do topo da pilha dinâmica
+int pop(Pilha* pilha){
+    if(vazia(pilha)){
+        printf("Erro: pilha vazia!\n");
+        exit(-1);
+    }
+    int valor = pilha -> valor[pilha->topo];
+    pilha -> topo--;
+    return valor;
+}
+
+
+int main() {
+    int pilha_est[TAM_MAX];
+    int n = 0;
+
+    printf("Informe o tamanho da pilha: ");
+    scanf("%d", &n);
+    for(int i = 0 ; i < n ; i++){
+        scanf("%d", &pilha_est[i]);
+    }
+    
+    Pilha* pilha_din = criar(n);
+
+    for(int i = 0 ; i < n ; i++){
+        push(pilha_din, pilha_est[i]);
+    }
+
+    while (!vazia(pilha_din)) {
+        printf("%d ", pop(pilha_din));
+    }
+
+    printf("\n");
+    
+    free(pilha_din -> valor);
+    free(pilha_din);
+    
+return 0;
+}
