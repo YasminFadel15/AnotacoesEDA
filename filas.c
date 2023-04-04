@@ -1,4 +1,4 @@
-//Fila estática: utilização de vetor circular
+//Fila estática: utilização de vetor circular com vetor sem dinamicidade - FIFO
 
 //Definição
 #include <stdio.h>
@@ -31,7 +31,7 @@ int cheia(Fila* fila){
   return (fila -> cauda + 1) % fila -> tamanho == fila -> cabeca;
 }
 
-void push(Fila* fila, int valor){
+void adicionar(Fila* fila, int valor){
  if(!cheia(fila)){
    fila -> cauda = (fila -> cauda + 1) % fila -> tamanho;
    fila -> vetor[fila -> cauda] = valor;
@@ -43,7 +43,7 @@ void push(Fila* fila, int valor){
     printf("Fila cheia.");
 }
   
-int pop(Fila* fila){
+int remover(Fila* fila){
  if(!vazia(fila)){
    int valor = fila -> vetor[fila -> cabeca];
    
@@ -77,4 +77,95 @@ int main(){
 }
 
 
-//Fila dinâmica: elemento encadeados
+//Fila dinâmica: elementos encadeados com alocação de memória - FIFO
+
+//Definição
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct{
+  int valor;
+  struct Elemento* proximo;
+} Elemento; 
+
+typedef struct{
+  Elemento* cabeca;
+  Elemento* cauda;
+} Fila; 
+
+//Criação da fila
+Fila* criar(){
+  Fila* fila = malloc(sizeof(Fila));
+  fila -> cabeca = NULL;
+  fila -> cauda = NULL;
+  
+  return fila;
+} 
+
+//Verificação - fila vazia
+int vazia(Fila* fila){
+  return fila -> cabeca == NULL && fila -> cauda == NULL;
+} 
+
+void adicionar(Fila* fila, int valor){
+ Elemento* elemento = malloc(sizeof(Elemento));
+ elemento -> valor = valor;
+ 
+ if(!vazia(fila))
+  fila -> cauda -> proximo = (struct Elemento) elemento;
+ else
+   fila -> cabeca = elemento;
+  
+ fila -> cauda = elemento;
+}
+
+int remover(Fila* fila){
+  if(!vazia(fila)){
+    int valor = fila -> cabeca -> valor;
+    
+    Elemento* elemento = fila -> cabeca;
+    fila -> cabeca = (Elemento*) fila -> cabeca -> proximo; //atualização da cabeça
+    
+    if(fila -> cabeca == NULL)
+      fila -> cauda == NULL;
+    
+    free(elemento); //tira o elemento que era a cabeça
+    
+    return valor;
+    
+  } else
+    printf("Fila vazia.");
+}
+
+void limpar(Fila* fila){
+ while(!vazia(fila)){
+   remover(fila);
+ } 
+  free(fila);
+} 
+
+void percorrer(Fila* fila){
+ Elemento* elemento = fila -> cabeca;
+
+ while(elemento != NULL){
+   printf("%d", elemento -> valor);
+   elemento = (Elemento*) elemento -> proximo;
+ }
+ printf("\n");
+} 
+
+int main(){
+  Fila* fila = criar();
+  
+  for(int i = 0 ; i < 10 ; i++)
+    adicionar(fila, i);
+  
+  printf("Percorrendo fila...");
+  percorrer(fila);
+   
+  while(!vazia(fila)){
+    printf("%d ", remover(fila));
+  }
+  
+  return 0;
+}
