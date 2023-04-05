@@ -83,7 +83,7 @@ int main(){
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct{
+typedef struct Elemento{
   int valor;
   struct Elemento* proximo;
 } Elemento; 
@@ -112,7 +112,7 @@ void adicionar(Fila* fila, int valor){
  elemento -> valor = valor;
  
  if(!vazia(fila))
-  fila -> cauda -> proximo = (struct Elemento) elemento;
+  fila -> cauda -> proximo = elemento;
  else
    fila -> cabeca = elemento;
   
@@ -124,10 +124,10 @@ int remover(Fila* fila){
     int valor = fila -> cabeca -> valor;
     
     Elemento* elemento = fila -> cabeca;
-    fila -> cabeca = (Elemento*) fila -> cabeca -> proximo; //atualização da cabeça
+    fila -> cabeca = fila -> cabeca -> proximo; //atualização da cabeça
     
     if(fila -> cabeca == NULL)
-      fila -> cauda == NULL;
+      fila -> cauda = NULL;
     
     free(elemento); //tira o elemento que era a cabeça
     
