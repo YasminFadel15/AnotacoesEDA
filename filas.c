@@ -83,76 +83,73 @@ int main(){
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Elemento{
-  int valor;
-  struct Elemento* proximo;
-} Elemento; 
+typedef struct {
+    int valor;
+    struct Elemento* proximo;
+} Elemento;
 
-typedef struct{
-  Elemento* cabeca;
-  Elemento* cauda;
-} Fila; 
+typedef struct {
+    Elemento* cabeca;
+    Elemento* cauda;
+} Fila;
 
-//Criação da fila
-Fila* criar(){
-  Fila* fila = malloc(sizeof(Fila));
-  fila -> cabeca = NULL;
-  fila -> cauda = NULL;
-  
-  return fila;
-} 
+Fila* criar() {
+    Fila* fila = malloc(sizeof(Fila));
+    fila->cabeca = NULL;
+    fila->cauda = NULL;
 
-//Verificação - fila vazia
-int vazia(Fila* fila){
-  return fila -> cabeca == NULL && fila -> cauda == NULL;
-} 
-
-void adicionar(Fila* fila, int valor){
- Elemento* elemento = malloc(sizeof(Elemento));
- elemento -> valor = valor;
- 
- if(!vazia(fila))
-  fila -> cauda -> proximo = elemento;
- else
-   fila -> cabeca = elemento;
-  
- fila -> cauda = elemento;
+    return fila;
 }
 
-int remover(Fila* fila){
-  if(!vazia(fila)){
-    int valor = fila -> cabeca -> valor;
-    
-    Elemento* elemento = fila -> cabeca;
-    fila -> cabeca = fila -> cabeca -> proximo; //atualização da cabeça
-    
-    if(fila -> cabeca == NULL)
-      fila -> cauda = NULL;
-    
-    free(elemento); //tira o elemento que era a cabeça
-    
+int vazia(Fila* fila) {
+    return fila->cabeca == NULL && fila->cauda == NULL;
+}
+
+void adicionar(Fila* fila, int valor) {
+    Elemento* elemento = malloc(sizeof(Elemento));
+    elemento->valor = valor;
+    elemento->proximo = NULL;
+
+    if (fila->cauda != NULL) {
+        fila->cauda->proximo = (struct Elemento*) elemento;
+    } else {
+        fila->cabeca = elemento;
+    }
+
+    fila->cauda = elemento;
+}
+
+int remover(Fila* fila) {
+    if (vazia(fila)) {
+        printf("Fila vazia\n");
+        return 0;
+    }
+
+    int valor = fila->cabeca->valor;
+    Elemento* elemento = (Elemento*) fila->cabeca;
+
+    fila->cabeca = (Elemento*) elemento->proximo;
+    free(elemento);
+
     return valor;
-    
-  } else
-    printf("Fila vazia.");
 }
 
-void limpar(Fila* fila){
- while(!vazia(fila)){
-   remover(fila);
- } 
-  free(fila);
-} 
+void limpar(Fila* fila) {
+    while (!vazia(fila)) {
+        remover(fila);
+    }
+}
 
-void percorrer(Fila* fila){
- Elemento* elemento = fila -> cabeca;
+void percorrer(Fila* fila) {
+    Elemento* elemento = fila->cabeca;
 
- while(elemento != NULL){
-   printf("%d", elemento -> valor);
-   elemento = (Elemento*) elemento -> proximo;
- }
- printf("\n");
-} 
+    while (elemento != NULL) {
+        printf("%d ", elemento->valor);
+        elemento = (Elemento*) elemento->proximo;
+    }
+
+    printf("\n");
+}
 
 int main(){
   Fila* fila = criar();
